@@ -2,7 +2,6 @@ package game
 
 import (
 	"github.com/gorilla/websocket"
-	"fmt"
 )
 
 const (
@@ -19,6 +18,7 @@ type Snake struct {
 	PrevDirection string `json:"prev_direction"`
 	NextDirection string `json:"next_direction"`
 	Body          []int  `json:"body"`
+	Color         []int  `json:"color"`
 }
 
 type Rule struct {
@@ -58,13 +58,13 @@ func initGame(ws *websocket.Conn) {
 		},
 		Snakes: []Snake{
 			Snake{
-				Name: "qbhy",
+				Name:  "qbhy",
 				Speed: 1,
 			},
 		},
 	}
-	fmt.Println(state)
-
-	ws.WriteJSON(state)
-
+	ws.WriteJSON(Message{
+		Action: "setInitState",
+		Data:   state,
+	})
 }
