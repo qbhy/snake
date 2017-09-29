@@ -16,6 +16,9 @@ type Request struct {
 	Args   string `json:"args"`
 }
 
+var Status = "waiting"
+
+
 var Clients = make(map[*websocket.Conn]bool)
 var Broadcast = make(chan Message)
 
@@ -23,12 +26,20 @@ func init() {
 	go HandleMessages()
 }
 
-func HandleRequest(request Request) {
+func HandleRequest(ws *websocket.Conn, request Request) {
 	msg := Message{
 		Message: "啦啦啦",
 		Data:    request.Action,
 	}
-	Broadcast <- msg
+	if request.Action == "init" {
+		initGame(ws)
+	} else {
+		PushMessage(msg)
+	}
+}
+
+func PushMessage(message Message) {
+	Broadcast <- message
 }
 
 //广播发送至页面

@@ -35,11 +35,8 @@ func (this *WebSocketController) WS() {
 	defer ws.Close()
 	game.Clients[ws] = true
 
-	println(len(game.Clients))
-
-	//不断的从页面上获取数据 然后广播发送出去
+	// 不断的从页面上获取数据
 	for {
-		//将从页面上接收数据改为不接收 直接发送
 		var request game.Request
 		err := ws.ReadJSON(&request)
 		if err != nil {
@@ -49,6 +46,6 @@ func (this *WebSocketController) WS() {
 			break
 		}
 
-		game.HandleRequest(request)
+		game.HandleRequest(ws, request)
 	}
 }
