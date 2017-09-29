@@ -6,15 +6,17 @@ import (
 )
 
 type Message struct {
-	Message string `json:"message"`
-	Data    string `json:"data"`
-	Code    string `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+	Action  string      `json:"action"`
 }
 
 type Request struct {
-	Action string `json:"action"`
-	Args   string `json:"args"`
+	Action string      `json:"action"`
+	Args  interface{} `json:"args"`
 }
+
+var Status = "waiting"
 
 var Clients = make(map[*websocket.Conn]bool)
 var Broadcast = make(chan Message)
@@ -23,12 +25,20 @@ func init() {
 	go HandleMessages()
 }
 
-func HandleRequest(request Request) {
+func HandleRequest(ws *websocket.Conn, request Request) {
 	msg := Message{
 		Message: "啦啦啦",
-		Data:    request.Action,
+		Action:  request.Action,
 	}
-	Broadcast <- msg
+	if request.Action == "init" {
+		initGame(ws)
+	} else {
+		PushMessage(msg)
+	}
+}
+
+func PushMessage(message Message) {
+	Broadcast <- message
 }
 
 //广播发送至页面
