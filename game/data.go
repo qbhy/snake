@@ -4,10 +4,10 @@ import (
 	"github.com/go-redis/redis"
 )
 
-var Client *redis.Client
+var Redis *redis.Client
 
 func init() {
-	Client = redis.NewClient(&redis.Options{
+	Redis = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
