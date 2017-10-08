@@ -14,7 +14,6 @@ func init() {
 	//	AllowCredentials: true,
 	//}))
 
-	beego.Router("/", &controllers.MainController{})
 	beego.Router("/w", &controllers.WebSocketController{}, "get:View")
 	beego.Router("/ws", &controllers.WebSocketController{}, "get:WS")
 
