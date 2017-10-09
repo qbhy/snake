@@ -26,10 +26,6 @@ func init() {
 }
 
 func HandleRequest(ws *websocket.Conn, request Request) {
-	msg := Message{
-		Message: "啦啦啦",
-		Action:  request.Action,
-	}
 	if request.Action == "init" {
 		initGame(ws)
 	} else if request.Action == "startGame" {
@@ -37,8 +33,6 @@ func HandleRequest(ws *websocket.Conn, request Request) {
 		PushMessage(Message{
 			Action: "startGame",
 		})
-	} else {
-		PushMessage(msg)
 	}
 }
 
