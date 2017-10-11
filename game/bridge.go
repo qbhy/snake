@@ -13,13 +13,14 @@ type Message struct {
 
 type Request struct {
 	Action string      `json:"action"`
-	Args  interface{} `json:"args"`
+	Args   interface{} `json:"args"`
 }
 
 var Status = "waiting"
 
 var Clients = make(map[*websocket.Conn]bool)
 var Broadcast = make(chan Message)
+var Users = map[string]string{}
 
 func init() {
 	go HandleMessages()
@@ -28,6 +29,8 @@ func init() {
 func HandleRequest(ws *websocket.Conn, request Request) {
 	if request.Action == "init" {
 		initGame(ws)
+	} else if request.Action == "initName" {
+		initName(ws, request.Args)
 	} else if request.Action == "startGame" {
 		Status = "running"
 		PushMessage(Message{

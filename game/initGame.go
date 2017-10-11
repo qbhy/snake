@@ -57,7 +57,7 @@ func initGame(ws *websocket.Conn) {
 			Left:   -1,
 		},
 		Snakes: []Snake{
-			Snake{
+			{
 				Name:  "qbhy",
 				Speed: 1,
 			},
@@ -66,5 +66,21 @@ func initGame(ws *websocket.Conn) {
 	ws.WriteJSON(Message{
 		Action: "setInitState",
 		Data:   state,
+	})
+}
+
+func initName(ws *websocket.Conn, q interface{}) {
+	name := q.(string)
+	if Users != nil && Users[name] == name {
+		ws.WriteJSON(Message{
+			Action: "HandleError",
+			Data:   "该名称已存在，请使用其他名称吧~",
+		})
+		return
+	}
+	Users[name] = name
+	ws.WriteJSON(Message{
+		Action: "SetName",
+		Data:   name,
 	})
 }
