@@ -20,7 +20,6 @@ var Status = "waiting"
 
 var Clients = make(map[*websocket.Conn]bool)
 var Broadcast = make(chan Message)
-var Users = map[string]string{}
 
 func init() {
 	go HandleMessages()
@@ -31,10 +30,11 @@ func HandleRequest(ws *websocket.Conn, request Request) {
 		initGame(ws)
 	} else if request.Action == "initName" {
 		initName(ws, request.Args)
-	} else if request.Action == "startGame" {
+	} else if request.Action == "StartGame" {
 		Status = "running"
 		PushMessage(Message{
-			Action: "startGame",
+			Action: "StartGame",
+			Data:   SnakeRoom,
 		})
 	}
 }

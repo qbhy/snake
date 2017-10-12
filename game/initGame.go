@@ -4,12 +4,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-const (
-	X     = 30
-	Y     = 30
-	SPEED = 1000
-)
-
 // 蛇
 type Snake struct {
 	Status        string `json:"status"`
@@ -21,12 +15,6 @@ type Snake struct {
 	Color         []int  `json:"color"`
 }
 
-type Rule struct {
-	Top    int `json:"top"`
-	Right  int `json:"right"`
-	Bottom int `json:"bottom"`
-	Left   int `json:"left"`
-}
 
 type State struct {
 	Status     string   `json:"status"`
@@ -41,31 +29,9 @@ type State struct {
 }
 
 func initGame(ws *websocket.Conn) {
-
-	state := State{
-		X:          X,
-		Y:          Y,
-		Status:     Status,
-		Speed:      SPEED,
-		Foods:      []int{},
-		Spectators: []string{},
-		Logs:       []string{},
-		Rule: Rule{
-			Top:    -X,
-			Right:  1,
-			Bottom: X,
-			Left:   -1,
-		},
-		Snakes: []Snake{
-			{
-				Name:  "qbhy",
-				Speed: 1,
-			},
-		},
-	}
 	ws.WriteJSON(Message{
 		Action: "setInitState",
-		Data:   state,
+		Data:   SnakeRoom,
 	})
 }
 
