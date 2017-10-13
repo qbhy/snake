@@ -44,7 +44,9 @@ func initName(ws *websocket.Conn, q interface{}) {
 		})
 		return
 	}
+
 	Users[name] = name
+	Clients[ws] = name
 	ws.WriteJSON(Message{
 		Action: "SetName",
 		Data:   name,

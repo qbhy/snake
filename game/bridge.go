@@ -18,7 +18,7 @@ type Request struct {
 
 var Status = "waiting"
 
-var Clients = make(map[*websocket.Conn]bool)
+var Clients = make(map[*websocket.Conn]string)
 var Broadcast = make(chan Message)
 
 func init() {
@@ -32,6 +32,9 @@ func HandleRequest(ws *websocket.Conn, request Request) {
 		initName(ws, request.Args)
 	} else if request.Action == "StartGame" {
 		Status = "running"
+		ws.WriteJSON(Message{
+			Action: Clients[ws],
+		})
 		PushMessage(Message{
 			Action: "StartGame",
 			Data:   SnakeRoom,

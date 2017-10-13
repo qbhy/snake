@@ -33,7 +33,7 @@ func (this *WebSocketController) WS() {
 		log.Fatal(err)
 	}
 	defer ws.Close()
-	game.Clients[ws] = true
+	game.Clients[ws] = string(len(game.Clients))
 
 	// 不断的从页面上获取数据
 	for {
@@ -45,7 +45,6 @@ func (this *WebSocketController) WS() {
 			delete(game.Clients, ws)
 			break
 		}
-
 		game.HandleRequest(ws, request)
 	}
 }
