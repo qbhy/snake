@@ -27,18 +27,13 @@ func init() {
 
 func HandleRequest(ws *websocket.Conn, request Request) {
 	if request.Action == "init" {
-		initGame(ws)
-	} else if request.Action == "initName" {
-		initName(ws, request.Args)
-	} else if request.Action == "StartGame" {
-		Status = "running"
-		ws.WriteJSON(Message{
-			Action: Clients[ws],
-		})
-		PushMessage(Message{
-			Action: "StartGame",
-			Data:   SnakeRoom,
-		})
+		// init
+	} else if request.Action == "InitGame" {
+		InitGame(ws, request.Args)
+	} else if request.Action == "AddLog" {
+		AddLog(ws, request.Args)
+	} else if request.Action == "Ready" {
+		Ready(ws, request.Args)
 	}
 }
 

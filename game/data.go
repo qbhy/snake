@@ -2,16 +2,31 @@ package game
 
 import (
 	"github.com/go-redis/redis"
+	"github.com/gorilla/websocket"
 )
 
 var Redis *redis.Client
 
 const (
-	X     = 30
-	Y     = 30
-	SPEED = 1000
+	X       = 60
+	Y       = 30
+	SPEED   = 1000
+	WAITING = "waiting"
+	READY   = "ready"
 )
 
+// 蛇
+type Snake struct {
+	Status        string `json:"status"`
+	Name          string `json:"name"`
+	Speed         int    `json:"speed"`
+	PrevDirection string `json:"prev_direction"`
+	NextDirection string `json:"next_direction"`
+	Body          []int  `json:"body"`
+	Color         string `json:"color"`
+}
+
+// 房间
 type Room struct {
 	Status     string           `json:"status"`
 	X          int              `json:"x"`
@@ -21,7 +36,7 @@ type Room struct {
 	Rule       Rule             `json:"rule"`
 	Spectators []string         `json:"spectators"`
 	Foods      []int            `json:"foods"`
-	Logs       []string         `json:"logs"`
+	//Logs       []string         `json:"logs"`
 }
 
 type Rule struct {
@@ -32,6 +47,8 @@ type Rule struct {
 }
 
 var Users = map[string]string{}
+
+var ColorMap = []string{"red", "blue", "yellow", "green", "#ccc", "#399"}
 
 var SnakeRoom Room
 
@@ -53,9 +70,16 @@ func init() {
 			Bottom: X,
 			Left:   -1,
 		},
-		Snakes: map[string]Snake{},
-		Logs:   []string{},
-		Foods:  []int{},
+		Snakes:     map[string]Snake{},
+		Spectators: []string{},
+		Foods:      []int{},
 	}
 
+}
+
+func AddLog(ws *websocket.Conn, log interface{}) {
+	PushMessage(Message{
+		Action: "AddLog",
+		Data:   Clients[ws] + "说:" + log.(string),
+	})
 }
