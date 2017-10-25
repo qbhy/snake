@@ -42,7 +42,7 @@ func (this *WebSocketController) WS() {
 		if err != nil {
 			fmt.Println("Request")
 			log.Printf("error: %v", err)
-			delete(game.Clients, ws)
+			game.OnClose(ws)
 			break
 		}
 		game.HandleRequest(ws, request)

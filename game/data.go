@@ -12,6 +12,7 @@ const (
 	Y       = 30
 	SPEED   = 1000
 	WAITING = "waiting"
+	RUNNING = "running"
 	READY   = "ready"
 )
 
@@ -48,8 +49,6 @@ type Rule struct {
 
 var Users = map[string]string{}
 
-var ColorMap = []string{"red", "blue", "yellow", "green", "#ccc", "#399"}
-
 var SnakeRoom Room
 
 func init() {
@@ -60,7 +59,7 @@ func init() {
 	})
 
 	SnakeRoom = Room{
-		Status: "waiting",
+		Status: WAITING,
 		X:      X,
 		Y:      Y,
 		Speed:  SPEED,
@@ -70,7 +69,7 @@ func init() {
 			Bottom: X,
 			Left:   -1,
 		},
-		Snakes:     map[string]Snake{},
+		Snakes:     make(map[string]Snake),
 		Spectators: []string{},
 		Foods:      []int{},
 	}
@@ -78,8 +77,5 @@ func init() {
 }
 
 func AddLog(ws *websocket.Conn, log interface{}) {
-	PushMessage(Message{
-		Action: "AddLog",
-		Data:   Clients[ws] + "说:" + log.(string),
-	})
+	PushLog(Clients[ws] + "说:" + log.(string))
 }

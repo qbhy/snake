@@ -1,8 +1,9 @@
 package game
 
-func GenerateSnake(name string) Snake {
-	l := len(SnakeRoom.Snakes)
-	n := l * X * 2
+var ColorMap = []string{"red", "blue", "yellow", "green", "#ccc", "#399"}
+
+func GenerateSnake(name string, len int) Snake {
+	n := len * X * 3
 	return Snake{
 		Status:        READY,
 		Name:          name,
@@ -10,6 +11,6 @@ func GenerateSnake(name string) Snake {
 		PrevDirection: "right",
 		NextDirection: "right",
 		Body:          []int{6 + n, 5 + n, 4 + n, 3 + n, 2 + n, 1 + n},
-		Color:         ColorMap[l],
+		Color:         ColorMap[len],
 	}
 }

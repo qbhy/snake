@@ -20,17 +20,19 @@ func InitGame(ws *websocket.Conn, q interface{}) {
 		Action: "InitName",
 		Data:   name,
 	})
-	PushMessage(Message{
-		Action: "SetRoomInfo",
-		Data:   SnakeRoom,
-	})
+	UpdateRoom()
 }
 
-func Ready(ws *websocket.Conn, q interface{}){
+func Ready(ws *websocket.Conn, q interface{}) {
 	name := Clients[ws]
-	SnakeRoom.Snakes[name] = GenerateSnake(name)
-	PushMessage(Message{
-		Action: "SetRoomInfo",
-		Data: SnakeRoom,
-	})
+	if len(SnakeRoom.Snakes) > 5 {
+		SendError(ws, "该房间人数已满!")
+		return
+	}
+	if _, ok := SnakeRoom.Snakes[name]; ok {
+		SendError(ws, "您已准备好，请等待其他玩家加入!")
+		return
+	}
+	SnakeRoom.Snakes[name] = GenerateSnake(name, len(SnakeRoom.Snakes))
+	UpdateRoom()
 }
