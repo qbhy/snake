@@ -5,7 +5,7 @@ var ColorMap = []string{"red", "blue", "yellow", "green", "#ccc", "#399"}
 func GenerateSnake(name string, len int) Snake {
 	n := len * X * 3
 	return Snake{
-		Status:        READY,
+		Status:        WAITING,
 		Name:          name,
 		Speed:         1,
 		PrevDirection: "right",

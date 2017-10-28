@@ -33,8 +33,10 @@ func HandleRequest(ws *websocket.Conn, request Request) {
 		InitGame(ws, request.Args)
 	} else if request.Action == "AddLog" {
 		AddLog(ws, request.Args)
+	} else if request.Action == "Entry" {
+		Entry(ws)
 	} else if request.Action == "Ready" {
-		Ready(ws, request.Args)
+		Ready(ws)
 	}
 }
 
